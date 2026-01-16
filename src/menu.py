@@ -19,7 +19,7 @@ MAX_CD = 100
 
 state = {
     "day": 1,
-    "creative_drive": 50,
+    "creative_drive": MAX_CD,
     "flags": set(),
     "history": [],
     "choices": ["A. bjhcbajbajbc", "B. vxhxvhxajb"],
@@ -57,7 +57,7 @@ def clear():
 def resetGame():
     state["day"] = 1
     state["scene_id"] = 1
-    state["creative_drive"] = 50
+    state["creative_drive"] = MAX_CD
     state["flags"] = set()
     state["history"] = []
     state["last_cd_change"] = None
