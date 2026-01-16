@@ -2,6 +2,7 @@ from menu import storyScreen, mainScreen
 
 MAX_ENERGY = 100
 state = {
+
     "day": 1,
     "energy": MAX_ENERGY,
     "choices" : []
