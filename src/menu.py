@@ -13,15 +13,21 @@ import os
 import sys
 import time
 
+MIN_CD = 0
+MAX_CD = 100
+
+state = {
+    "day": 1,
+    "creative_drive": MAX_CD,
+    "flags": set(),
+    "history": [],
+    "choices": ["a", "b"],
+    "last_cd_change": None
+}
+
 def clear():
     os.system("cls")
 
-MAX_ENERGY = 100
-state = {
-    "day": 1,
-    "energy": MAX_ENERGY,
-    "choices": ["a", "b"]
-}
 
 def keys():
     keyPress = r"""
@@ -96,15 +102,8 @@ def storyScreen():
     
     selected = 0
     
-    progress = Progress(
-        TextColumn("[progress.description]{task.description}"),
-        BarColumn(),
-        TextColumn("{task.completed}/{task.total}"))
-    
-    task = progress.add_task("", total=MAX_ENERGY)
-    
     layout.split_column(
-        Layout(name="Top", size=4),
+        Layout(name="Top", size=3),
         Layout(name="Middle", size=20),
         Layout(name="Bottom", size=10))
     
@@ -119,8 +118,6 @@ def storyScreen():
     layout["Bottom"].split_row(
         Layout(name="Choices", ratio=3),
         Layout(name="Controls", ratio=1))
-    
-    progress.update(task, completed=state["energy"])
     
     # def printScene(text, delay=0.02):
     #     displayed = ""  # what has been printed so far
@@ -137,6 +134,55 @@ def storyScreen():
     # Past construction fences wrapped in advertisements for futures he isn't part of."""
     # printScene(story_text)
     
+    def cdPanel():
+        progress = Progress(
+        TextColumn("[bold #F0B01D]{task.total}[/bold #F0B01D]", style="yellow"),
+        BarColumn(
+            bar_width=50,
+            style="bright_black",
+            finished_style="#F0B01D"
+        ),
+        expand=True)
+    
+        task = progress.add_task("", total=MAX_CD)
+        progress.update(task, completed=state["creative_drive"])
+        
+        delta = state.get("last_cd_change", 0)
+        
+        if delta is None:
+            delta_text = Text("")
+        elif delta > 0:
+            delta_text = Text(f"+{delta}", style="bold green")
+        elif delta < 0:
+            delta_text = Text(f"-{delta}", style="bold red")
+        else: 
+            delta_text = Text(f"{delta}", style="bold white")
+            
+        return Panel(
+            Columns([progress, delta_text], align="left"),
+            box=box.MINIMAL,
+        )
+        
+    def historyPanel():
+        if not state["history"]:
+            return Panel("Choices are stored here.", title="History")
+        
+        lines=[]
+        for entry in state["history"][-6:]:
+            cd = entry["cd_change"]
+            color = "green" if cd>0 else "red" if cd<0 else "white"
+            sign = f"+{cd}" if cd>0 else str(cd)
+            
+            lines.append(
+                Text(f"Scene {entry['scene_id']} | {entry['choice']} {sign}", style = color)
+            )
+        
+        return Panel(
+            Align.left(Text("\n").join(lines)),
+            title="History",
+            border_style="white"
+        )
+    
     def buildChoices():
         choicesContent = ""
         for i, text in enumerate(state["choices"]):
@@ -149,18 +195,21 @@ def storyScreen():
                      border_style="blue",
                      padding=1)  
     
-    layout["Bar"].update(
+    layout["Bar"].update(cdPanel())
+    
+    day_text = Text(
+        f"DAY {state['day']}",
+        justify="center",
+        style="bold #F0B01D"
+    )
+
+    layout["Day"].update(
         Panel(
-            progress,
-            title="Energy",
-            box=box.MINIMAL,
-        )
+            Align.center(day_text, vertical="middle"),
+            box=box.MINIMAL)
     )
     
-    layout["Day"].update(Panel(
-        f"Day {state["day"]}",
-        title="Current Day",
-        box=box.MINIMAL))
+    layout["List"].update(historyPanel())
     
     # layout["Screen"].update(printScene())
     layout["Choices"].update(buildChoices())
@@ -192,20 +241,26 @@ def storyScreen():
             elif key == b'\x1b':
                 exit()
     
-def energyChange(choice):
-    if choice == "1":
-        effect = -1
-        label = "Conformed"
-    else:
-        effect = +1
-        label = "Created"
+def applyChoice(state, scene, choice_key):
+    choice = scene["choices"][choice_key]
 
-    state["energy"] = max(0, min(MAX_ENERGY, state["energy"] + effect))
+    cd_before = state["creative_drive"]
 
-    state["choices"].append({
-        "day": state['day'],
-        "choice": label,
-        "effect": effect
-    })
+    state["creative_drive"] += choice["cd_change"]
+    state["creative_drive"] = max(MIN_CD, min(MAX_CD, state["creative_drive"]))
+    
+    cd_after = state["creative_drive"]
 
-    state["day"] += 1
+    state["flags"].add(choice["flag"])
+
+    state["history"].append(
+        {
+            "scene_id": scene["id"],
+            "choice": choice_key,
+            "cd_change": choice["cd_change"]
+        }
+    )
+    
+    state["last_cd_change"] = cd_after - cd_before
+
+    return choice["bridge"]
