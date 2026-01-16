@@ -19,7 +19,7 @@ MAX_CD = 100
 
 state = {
     "day": 1,
-    "creative_drive": MAX_CD,
+    "creative_drive": 50,
     "flags": set(),
     "history": [],
     "choices": ["A. bjhcbajbajbc", "B. vxhxvhxajb"],
@@ -53,6 +53,14 @@ theEnd = r"""
 
 def clear():
     os.system("cls")
+
+def resetGame():
+    state["day"] = 1
+    state["scene_id"] = 1
+    state["creative_drive"] = 50
+    state["flags"] = set()
+    state["history"] = []
+    state["last_cd_change"] = None
 
 def keys():
     keyPress = r"""
@@ -141,26 +149,36 @@ def mainScreen():
                 exit()
 
 def getDayData():
-    if state["day"] == 1:
-        return story.DAY_1
-    elif state["day"] == 2.1:
-        return story.DAY2_1
-    elif state["day"] == 2.2:
-        return story.DAY2_2
-    elif state["day"] == 2.3:
-        return story.DAY2_3
-    elif state["day"] == 3.1:
-        return story.DAY3_1
-    elif state["day"] == 3.2:
-        return story.DAY3_2
-    elif state["day"] == 3.3:
-        return story.DAY3_3
-    elif state["day"] == 4.1:
-        return story.DAY4_1
-    elif state["day"] == 4.2:
-        return story.DAY4_2
-    elif state["day"] == 4.3:
-        return story.DAY4_3
+    """
+    Robust day lookup: builds attribute name from state['day'].
+    Examples:
+      1    -> DAY_1
+      2.1  -> DAY2_1
+      3.3  -> DAY3_3
+    Returns None if attribute missing or not a mapping with 'scenes'.
+    """
+    d = state.get("day")
+    if d is None:
+        return None
+
+    # build attr name
+    if isinstance(d, int):
+        attr = f"DAY_{d}"
+    else:
+        # convert floats or numeric-like strings (e.g. 2.1 -> '2_1')
+        s = str(d).replace('.', '_')
+        # if original integer represented as '1.0' -> ensure matching DAY_1 vs DAY1_0 as needed
+        if s.endswith('_0') and '.' not in str(d):
+            attr = f"DAY_{s[:-2]}"
+        else:
+            attr = f"DAY{s}"
+
+    day_data = getattr(story, attr, None)
+
+    # ensure we return a dict-like day object
+    if isinstance(day_data, dict):
+        return day_data
+    return None
 
 def getCurrentScene():
     day_data = getDayData()
@@ -289,9 +307,21 @@ def storyScreen():
     def buildScreen(scene):
         if not scene:
             return Panel("No scene.", box=box.MINIMAL)
-        title = f"[bold]{scene.get('title','')}[/bold]\n\n"
-        body = scene.get("text","")
-        return Panel(Align.left(Text(title + body)), box=box.MINIMAL, padding=1)
+
+        title = scene.get("title", "")
+        body = scene.get("text", "")
+
+        return Panel(
+            Group(
+                Align.center(
+                    Text(title, style="bold #AE5182"),
+                ),
+                Text(body)
+            ),
+            title="Main Screen",
+            box=box.MINIMAL,
+            padding=(1, 2)
+        )
     
     def buildChoices():
         nonlocal selected
@@ -377,6 +407,11 @@ def storyScreen():
                     layout["List"].update(historyPanel())
                     layout["Choices"].update(Panel(" ", title="Choices", border_style="#AE5182"))
                     time.sleep(0.8)
+                    
+                    #check for game over
+                    if state.get("creative_drive", 0) <= 0:
+                        gameOverScreen()
+                        break
     
                     # advance to next scene
                     state["scene_id"] = scene["id"] + 1
@@ -447,7 +482,9 @@ def applyChoice(state, scene, choice_key):
    
     cd_after = state["creative_drive"]
 
-    state["flags"].add(choice["flag"])
+    # only add flag if present
+    if "flag" in choice:
+        state["flags"].add(choice["flag"])
 
     state["history"].append(
         {
@@ -459,10 +496,11 @@ def applyChoice(state, scene, choice_key):
    
     state["last_cd_change"] = cd_after - cd_before
 
-    return choice["bridge"]
+    return choice.get("bridge", "")
 
 
 def endScreen():
+    resetGame()
     console = Console()
     layout = Layout()
     
@@ -493,6 +531,7 @@ def endScreen():
     mainScreen()
     
 def gameOverScreen():
+    resetGame()
     console = Console()
     layout = Layout()
     
