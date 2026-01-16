@@ -32,6 +32,17 @@ sceneState = {
     "choices": ""
 }
 
+def stateUpdater(sceneState, scene):
+    sceneState["choice_keys"] = list(scene["choices"].keys())
+    sceneState["id"] = scene["id"]
+    sceneState["title"] = scene["title"]
+    sceneState["text"] = scene["text"]
+    sceneState["choices"] = [
+        choice["text"]
+        for choice in scene["choices"].values()
+    ]
+    return scene
+
 def clear():
     os.system("cls")
 
@@ -272,13 +283,3 @@ def applyChoice(state, scene, choice_key):
 
     return choice["bridge"]
 
-def stateUpdater(sceneState, scene):
-    sceneState["choice_keys"] = list(scene["choices"].keys())
-    sceneState["id"] = scene["id"]
-    sceneState["title"] = scene["title"]
-    sceneState["text"] = scene["text"]
-    sceneState["choices"] = [
-        choice["text"]
-        for choice in scene["choices"].values()
-    ]
-    return scene
