@@ -22,7 +22,6 @@ state = {
     "creative_drive": MAX_CD,
     "flags": set(),
     "history": [],
-    "choices": ["A. bjhcbajbajbc", "B. vxhxvhxajb"],
     "last_cd_change": None
 }
 
