@@ -43,7 +43,7 @@ DAY_1 = {
             "title": "THE CAFÉ MEETING",
             "text": (
                 "Nolan meets Mira, a fellow architect.\n"
-                "“Firms want what already sells,” she says."
+                "\"Firms want what already sells,\" she says."
             ),
             "choices": {
                 "A": {
@@ -698,8 +698,8 @@ DAY2_3 = {
     ]
 }
 
-DAY_3 = {
-    "day": 3,
+DAY3_1 = {
+    "day": 3.1,
     "title": "RISING PATH",
     "scenes": [
         {
@@ -717,7 +717,7 @@ DAY_3 = {
             "choices": {
                 "A": {
                     "text": "A. Write honestly about what the space means to him",
-                    "cd_change": +2,
+                    "cd_change": +20,
                     "flag": "articulates_vision",
                     "bridge": (
                         "Nolan wrote slowly, deleting and rewriting until the words felt close enough to the truth.\n"
@@ -727,7 +727,7 @@ DAY_3 = {
                 },
                 "B": {
                     "text": "B. Write something neutral and professional",
-                    "cd_change": -1,
+                    "cd_change": -10,
                     "flag": "softens_voice",
                     "bridge": (
                         "Nolan wrote something safe. Clean. Easy to read.\n"
@@ -745,24 +745,24 @@ DAY_3 = {
                 "Later that morning, Mira visits his studio.\n\n"
                 "She notices the new project pinned to the wall.\n"
                 "The empty lot has become something more.\n\n"
-                "She doesn’t critique it.\n"
+                "She doesn't critique it.\n"
                 "She asks:\n\n"
                 "\"Who is this for?\""
             ),
             "choices": {
                 "A": {
-                    "text": "A. \"For people who don’t get asked what they need.\"",
-                    "cd_change": +1,
+                    "text": "A. \"For people who don't get asked what they need.\"",
+                    "cd_change": +10,
                     "flag": "defines_purpose",
                     "bridge": (
-                        "Mira nodded, slowly. \"Then don’t lose that.\"\n"
+                        "Mira nodded, slowly. \"Then don't lose that.\"\n"
                         "They talked for a while after. Not about technique. About places. About cities.\n"
                         "When she left, Nolan stood alone in the studio, seeing his work differently."
                     )
                 },
                 "B": {
                     "text": "B. \"For anyone who might want it.\"",
-                    "cd_change": -1,
+                    "cd_change": -10,
                     "flag": "avoids_commitment",
                     "bridge": (
                         "Mira smiled, but her eyes searched his face.\n"
@@ -780,7 +780,7 @@ DAY_3 = {
             "text": (
                 "Nolan goes out to clear his head.\n\n"
                 "In a small plaza, he sees a temporary installation built by local students.\n\n"
-                "It’s imperfect.\n\n"
+                "It's imperfect.\n\n"
                 "But people are inside it.\n"
                 "Talking.\n"
                 "Resting.\n"
@@ -791,7 +791,7 @@ DAY_3 = {
             "choices": {
                 "A": {
                     "text": "A. Sit and sketch what he observes",
-                    "cd_change": +2,
+                    "cd_change": +20,
                     "flag": "studies_lived_design",
                     "bridge": (
                         "Nolan filled pages. Not structures, but interactions.\n"
@@ -802,13 +802,13 @@ DAY_3 = {
                 },
                 "B": {
                     "text": "B. Take a photo and move on",
-                    "cd_change": -1,
+                    "cd_change": -10,
                     "flag": "remains_observer",
                     "bridge": (
                         "The photo saved.\n"
                         "Nolan stood a moment longer, then continued walking.\n"
                         "The image stayed on his phone.\n"
-                        "The feeling didn’t follow him."
+                        "The feeling didn't follow him."
                     )
                 }
             }
@@ -829,7 +829,7 @@ DAY_3 = {
             "choices": {
                 "A": {
                     "text": "A. Accept and begin preparing",
-                    "cd_change": +2,
+                    "cd_change": +20,
                     "flag": "steps_into_visibility",
                     "bridge": (
                         "Nolan marked the date on his calendar.\n"
@@ -839,7 +839,7 @@ DAY_3 = {
                 },
                 "B": {
                     "text": "B. Thank them and delay",
-                    "cd_change": -2,
+                    "cd_change": -20,
                     "flag": "retreats_from_exposure",
                     "bridge": (
                         "Nolan closed the message after replying.\n"
@@ -854,8 +854,8 @@ DAY_3 = {
             "id": 5,
             "title": "EVENING DOUBT",
             "text": (
-                "At night, Nolan reviews what he’s started.\n\n"
-                "It doesn’t look like work meant for approval.\n\n"
+                "At night, Nolan reviews what he's started.\n\n"
+                "It doesn't look like work meant for approval.\n\n"
                 "It looks like work meant to say something.\n\n"
                 "That frightens him.\n\n"
                 "A thought returns:\n\n"
@@ -864,7 +864,7 @@ DAY_3 = {
             "choices": {
                 "A": {
                     "text": "A. Continue refining the project anyway",
-                    "cd_change": +2,
+                    "cd_change": +20,
                     "flag": "commits_despite_fear",
                     "bridge": (
                         "Nolan adjusted forms, erased, rebuilt.\n"
@@ -876,7 +876,7 @@ DAY_3 = {
                 },
                 "B": {
                     "text": "B. Switch to safer conceptual exercises",
-                    "cd_change": -2,
+                    "cd_change": -20,
                     "flag": "self_dilution",
                     "bridge": (
                         "Nolan opened an old folder of neutral studies.\n"
@@ -892,7 +892,7 @@ DAY_3 = {
             "title": "NIGHT CLOSING",
             "text": (
                 "Before sleeping, Nolan pins the newest version of the project above his desk.\n\n"
-                "It isn’t finished.\n\n"
+                "It isn't finished.\n\n"
                 "But it is undeniably his.\n\n"
                 "This is the first time his work feels like a direction instead of a response.\n\n"
                 "The city outside continues.\n\n"
@@ -902,8 +902,8 @@ DAY_3 = {
         }
     ]
 }
-DAY_3_2FRAGMENTING = {
-    "day": 3,
+DAY3_2 = {
+    "day": 3.2,
     "title": "FRAGMENTING SELF",
     "scenes": [
         {
@@ -911,12 +911,12 @@ DAY_3_2FRAGMENTING = {
             "title": "MORNING EMAILS",
             "text": (
                 "Nolan wakes up to a flood of emails from clients, the firm, and collaborators.\n\n"
-                "Each one requests minor but cumulative changes to yesterday’s designs."
+                "Each one requests minor but cumulative changes to yesterday's designs."
             ),
             "choices": {
                 "A": {
                     "text": "A. Make small adjustments but keep key personal touches",
-                    "cd_change": +1,
+                    "cd_change": +10,
                     "flag": "minor_resistance",
                     "bridge": (
                         "Nolan tweaks the designs, balancing instructions with personal flair.\n"
@@ -925,7 +925,7 @@ DAY_3_2FRAGMENTING = {
                 },
                 "B": {
                     "text": "B. Follow instructions fully without modification",
-                    "cd_change": -1,
+                    "cd_change": -10,
                     "flag": "full_compliance",
                     "bridge": (
                         "He deletes experimental notes and sketches, replacing them with uniform elements.\n"
@@ -946,17 +946,17 @@ DAY_3_2FRAGMENTING = {
             "choices": {
                 "A": {
                     "text": "A. Push back subtly, explaining reasoning for certain details",
-                    "cd_change": +1,
+                    "cd_change": +10,
                     "flag": "subtle_assertion",
                     "bridge": (
-                        "Nolan’s voice is heard, even if quietly.\n"
+                        "Nolan's voice is heard, even if quietly.\n"
                         "A few details remain untouched.\n"
                         "He leaves the meeting with a faint sense of self-preservation."
                     )
                 },
                 "B": {
                     "text": "B. Nod and make notes to adjust everything",
-                    "cd_change": -2,
+                    "cd_change": -20,
                     "flag": "deep_concession",
                     "bridge": (
                         "He notes every suggestion, erasing personal flourishes.\n"
@@ -972,13 +972,13 @@ DAY_3_2FRAGMENTING = {
             "title": "LUNCH INTERRUPTION",
             "text": (
                 "A fellow architect, Maya, joins him for a casual lunch.\n\n"
-                "\"You’ve changed your style,\" she observes.\n"
+                "\"You've changed your style,\" she observes.\n"
                 "\"Is it because of them or you?\""
             ),
             "choices": {
                 "A": {
                     "text": "A. Admit he feels pressured but still wants to retain his voice",
-                    "cd_change": +1,
+                    "cd_change": +10,
                     "flag": "self_reflection",
                     "bridge": (
                         "The conversation lingers.\n"
@@ -987,8 +987,8 @@ DAY_3_2FRAGMENTING = {
                     )
                 },
                 "B": {
-                    "text": "B. Claim it’s a conscious, practical choice",
-                    "cd_change": -1,
+                    "text": "B. Claim it's a conscious, practical choice",
+                    "cd_change": -10,
                     "flag": "avoids_truth",
                     "bridge": (
                         "He smiles faintly and changes the subject.\n"
@@ -1007,8 +1007,8 @@ DAY_3_2FRAGMENTING = {
             ),
             "choices": {
                 "A": {
-                    "text": "A. Work on the firm’s design, leaving the personal project paused",
-                    "cd_change": -1,
+                    "text": "A. Work on the firm's design, leaving the personal project paused",
+                    "cd_change": -10,
                     "flag": "personal_pause",
                     "bridge": (
                         "He finalizes the project with precision.\n"
@@ -1018,7 +1018,7 @@ DAY_3_2FRAGMENTING = {
                 },
                 "B": {
                     "text": "B. Spend time on personal concept, risking deadline stress",
-                    "cd_change": +1,
+                    "cd_change": +10,
                     "flag": "prioritizes_personal",
                     "bridge": (
                         "Lines and curves grow on the page.\n"
@@ -1039,7 +1039,7 @@ DAY_3_2FRAGMENTING = {
             "choices": {
                 "A": {
                     "text": "A. Sketch a small personal experiment to reclaim his voice",
-                    "cd_change": +2,
+                    "cd_change": +20,
                     "flag": "spark_reignited",
                     "bridge": (
                         "Even a small experiment restores a faint flame.\n"
@@ -1048,7 +1048,7 @@ DAY_3_2FRAGMENTING = {
                 },
                 "B": {
                     "text": "B. Leave everything to firm-approved work, shutting down creative impulses",
-                    "cd_change": -2,
+                    "cd_change": -20,
                     "flag": "creative_fatigue",
                     "bridge": (
                         "He powers down his laptop, the studio silent.\n"
@@ -1061,8 +1061,8 @@ DAY_3_2FRAGMENTING = {
     ]
 }
 
-DAY_3_3BURNOUT = {
-    "day": 3,
+DAY3_3 = {
+    "day": 3.3,
     "title": "BURNOUT SPIRAL",
     "scenes": [
         {
@@ -1075,7 +1075,7 @@ DAY_3_3BURNOUT = {
             "choices": {
                 "A": {
                     "text": "A. Follow their instructions strictly, prioritizing speed over vision",
-                    "cd_change": -1,
+                    "cd_change": -10,
                     "flag": "overcommits",
                     "bridge": (
                         "He works immediately, drafting layouts and details with precision.\n"
@@ -1084,7 +1084,7 @@ DAY_3_3BURNOUT = {
                 },
                 "B": {
                     "text": "B. Push back slightly, asking for clarification or adjusting timelines",
-                    "cd_change": +1,
+                    "cd_change": +10,
                     "flag": "asserts_boundaries",
                     "bridge": (
                         "He asks about priorities.\n"
@@ -1100,12 +1100,12 @@ DAY_3_3BURNOUT = {
             "title": "MIDDAY CLIENT CALL",
             "text": (
                 "A client calls about the commercial project.\n"
-                "They want “more exciting but safer” designs."
+                "They want \"more exciting but safer\" designs."
             ),
             "choices": {
                 "A": {
                     "text": "A. Alter the designs to meet their vague expectations",
-                    "cd_change": -2,
+                    "cd_change": -20,
                     "flag": "overadapted",
                     "bridge": (
                         "He adjusts his layouts, toning down bold elements.\n"
@@ -1115,7 +1115,7 @@ DAY_3_3BURNOUT = {
                 },
                 "B": {
                     "text": "B. Suggest alternatives that maintain some of his original ideas",
-                    "cd_change": +1,
+                    "cd_change": +10,
                     "flag": "preserves_integrity",
                     "bridge": (
                         "He explains his reasoning and offers compromise solutions.\n"
@@ -1136,10 +1136,10 @@ DAY_3_3BURNOUT = {
             "choices": {
                 "A": {
                     "text": "A. Work extra hours to satisfy deadlines",
-                    "cd_change": -2,
+                    "cd_change": -20,
                     "flag": "exhaustion_accumulates",
                     "bridge": (
-                        "Nolan’s fingers ache.\n"
+                        "Nolan's fingers ache.\n"
                         "Ideas blur.\n"
                         "The office lights flicker.\n"
                         "The satisfaction of completion is replaced by fatigue."
@@ -1147,12 +1147,12 @@ DAY_3_3BURNOUT = {
                 },
                 "B": {
                     "text": "B. Leave on time, planning to address some tasks tomorrow",
-                    "cd_change": +1,
+                    "cd_change": +10,
                     "flag": "self_care_attempt",
                     "bridge": (
                         "He leaves the office at a reasonable hour.\n"
                         "The night air feels refreshing, though deadlines linger.\n"
-                        "A small voice inside him whispers: “You can still create tomorrow.”"
+                        "A small voice inside him whispers: \"You can still create tomorrow.\""
                     )
                 }
             }
@@ -1167,18 +1167,18 @@ DAY_3_3BURNOUT = {
             ),
             "choices": {
                 "A": {
-                    "text": "A. Compare aggressively, feeling pressure to “catch up”",
-                    "cd_change": -1,
+                    "text": "A. Compare aggressively, feeling pressure to \"catch up\"",
+                    "cd_change": -10,
                     "flag": "insecurity_rises",
                     "bridge": (
-                        "Nolan scrolls through Sam’s work, noting the meticulous polish.\n"
+                        "Nolan scrolls through Sam's work, noting the meticulous polish.\n"
                         "His own sketches feel inadequate, even though they were never meant to be identical.\n"
                         "Anxiety seeps in."
                     )
                 },
                 "B": {
                     "text": "B. Appreciate the work but focus on his own pace and style",
-                    "cd_change": +1,
+                    "cd_change": +10,
                     "flag": "maintains_identity",
                     "bridge": (
                         "He compliments Sam and returns to his notes.\n"
@@ -1200,17 +1200,17 @@ DAY_3_3BURNOUT = {
             "choices": {
                 "A": {
                     "text": "A. Collapse into bed, ignoring personal projects",
-                    "cd_change": -2,
+                    "cd_change": -20,
                     "flag": "burnout_deepening",
                     "bridge": (
                         "He lies down, exhausted and hollow.\n"
-                        "The day’s work is completed, but the creative drive feels faint.\n"
+                        "The day's work is completed, but the creative drive feels faint.\n"
                         "The sketches remain untouched, like ghosts of ideas."
                     )
                 },
                 "B": {
                     "text": "B. Open a small personal sketch project, even for 10 minutes",
-                    "cd_change": +2,
+                    "cd_change": +20,
                     "flag": "small_spark_alive",
                     "bridge": (
                         "Even for a brief moment, he sketches freely.\n"
@@ -1223,8 +1223,8 @@ DAY_3_3BURNOUT = {
     ]
 }
 
-DAY_4 = {
-    "day": 4,
+DAY4_1 = {
+    "day": 4.1,
     "title": "THE STRUCTURE THAT REMAINS",
     "scenes": [
         {
@@ -1262,17 +1262,17 @@ DAY_4 = {
                 "A knock breaks the quiet.\n\n"
                 "It is Mira.\n\n"
                 "She steps inside slowly.\n\n"
-                "She doesn’t comment on success.\n"
-                "She doesn’t ask about clients.\n\n"
+                "She doesn't comment on success.\n"
+                "She doesn't ask about clients.\n\n"
                 "She looks around and says:\n\n"
-                "“You’ve been busy.”\n\n"
+                "\"You've been busy.\"\n\n"
                 "They talk.\n\n"
                 "Not about architecture.\n\n"
                 "About exhaustion.\n"
                 "About doubt.\n"
                 "About why he started.\n\n"
                 "At some point she asks:\n\n"
-                "“Do you still recognize yourself in what you make?”"
+                "\"Do you still recognize yourself in what you make?\""
             ),
             "bridge": (
                 "Nolan cannot answer immediately.\n\n"
@@ -1310,7 +1310,7 @@ DAY_4 = {
 
         {
             "id": 4,
-            "title": "THE OFFER HE DOESN’T TAKE",
+            "title": "THE OFFER HE DOESN'T TAKE",
             "text": (
                 "Late afternoon, a message finally arrives.\n\n"
                 "A follow-up.\n"
@@ -1372,8 +1372,8 @@ DAY_4 = {
     ]
 }
 
-DAY_4_CONFLICTED = {
-    "day": 4,
+DAY4_2 = {
+    "day": 4.2,
     "title": "THE STRUCTURE THAT SELLS",
     "scenes": [
         {
@@ -1406,12 +1406,12 @@ DAY_4_CONFLICTED = {
                 "Too well.\n\n"
                 "They like his revisions.\n"
                 "They like his flexibility.\n"
-                "They like how he “balances vision with realism.”\n\n"
+                "They like how he \"balances vision with realism.\"\n\n"
                 "They talk about contracts.\n"
                 "Visibility.\n"
                 "Future projects.\n\n"
                 "Someone says,\n"
-                "“You’re very adaptable.”\n\n"
+                "\"You're very adaptable.\"\n\n"
                 "Nolan smiles automatically.\n\n"
                 "The word lands heavier than it should."
             ),
@@ -1435,7 +1435,7 @@ DAY_4_CONFLICTED = {
                 "He opens one.\n\n"
                 "Stares.\n\n"
                 "Tries to continue it.\n\n"
-                "The lines don’t come easily.\n\n"
+                "The lines don't come easily.\n\n"
                 "He adjusts it instead.\n\n"
                 "Refines.\n"
                 "Softens.\n"
@@ -1456,11 +1456,11 @@ DAY_4_CONFLICTED = {
             "title": "THE CALL",
             "text": (
                 "His phone rings.\n\n"
-                "It’s someone from the firm.\n\n"
+                "It's someone from the firm.\n\n"
                 "A small decision.\n"
                 "A material choice.\n"
                 "A budget change.\n\n"
-                "They ask if it affects his “personal direction.”\n\n"
+                "They ask if it affects his \"personal direction.\"\n\n"
                 "Nolan says no.\n\n"
                 "He means: not significantly.\n"
                 "He means: not enough to stop."
@@ -1531,8 +1531,8 @@ DAY_4_CONFLICTED = {
     ]
 }
 
-DAY_4_DETACHED = {
-    "day": 4,
+DAY4_3 = {
+    "day": 4.3,
     "title": "THE SILENT PRACTICE",
     "scenes": [
         {
@@ -1559,7 +1559,7 @@ DAY_4_DETACHED = {
             "id": 2,
             "title": "THE EFFICIENT MORNING",
             "text": (
-                "The firm’s workspace hums.\n\n"
+                "The firm's workspace hums.\n\n"
                 "Conversations are about deliverables.\n"
                 "Deadlines.\n"
                 "Optimization.\n\n"
@@ -1568,7 +1568,7 @@ DAY_4_DETACHED = {
                 "He is quick.\n"
                 "Accurate.\n"
                 "Useful.\n\n"
-                "Someone thanks him for being “easy to work with.”\n\n"
+                "Someone thanks him for being \"easy to work with.\"\n\n"
                 "He nods."
             ),
             "bridge": (
@@ -1614,7 +1614,7 @@ DAY_4_DETACHED = {
                 "A style guide.\n\n"
                 "Everything is decided except execution.\n\n"
                 "Nolan replies:\n"
-                "“Received. I’ll begin today.”\n\n"
+                "\"Received. I'll begin today.\"\n\n"
                 "He does.\n\n"
                 "Immediately."
             ),
@@ -1652,7 +1652,7 @@ DAY_4_DETACHED = {
             "title": "THE PROFESSIONAL",
             "text": (
                 "Night.\n\n"
-                "Nolan’s studio is clean.\n\n"
+                "Nolan's studio is clean.\n\n"
                 "No loose pages.\n"
                 "No pinned concepts.\n\n"
                 "Only finalized plans.\n"

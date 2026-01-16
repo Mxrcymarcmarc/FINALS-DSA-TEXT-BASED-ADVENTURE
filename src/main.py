@@ -1,12 +1,4 @@
-from menu import mainScreen, endScreen
-
-MAX_ENERGY = 100
-state = {
-
-    "day": 1,
-    "energy": MAX_ENERGY,
-    "choices" : []
-}
+from menu import mainScreen, endScreen, storyScreen
 
 def main():
     while True:
@@ -16,8 +8,8 @@ def main():
             break
 
         else:
-            # storyScreen()
-            endScreen()
+            storyScreen()
+
     
 if __name__ == "__main__":
     main()

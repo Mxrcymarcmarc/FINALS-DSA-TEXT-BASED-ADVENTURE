@@ -26,13 +26,6 @@ state = {
     "last_cd_change": None
 }
 
-sceneState = {
-    "id": 0,
-    "title": "",
-    "text": "",
-    "choices": ""
-}
-
 theArchi = r"""
     ████████╗ ██╗   ██╗ ██████╗    ██████╗  ██████╗    ██████╗ ██╗   ██╗ ████████╗ ████████╗ ██████╗  ██████╗ ████████╗
     ╚══██╔══╝ ██║   ██║ ██╔═══╝   ██╔═══██╗ ██╔══██╗  ██╔════╝ ██║   ██║ ╚══██╔══╝ ╚══██╔══╝ ██╔═══╝ ██╔════╝ ╚══██╔══╝
@@ -57,17 +50,6 @@ theEnd = r"""
        ██║    ██║   ██║ ██████║   ██████║ ██║ ╚████║ ███████╔╝
        ╚═╝    ╚═╝   ╚═╝ ╚═════╝   ╚═════╝ ╚═╝  ╚═══╝ ╚══════╝ 
 """
-
-def stateUpdater(scene):
-    sceneState["choice_keys"] = list(scene["choices"].keys())
-    sceneState["id"] = scene["id"]
-    sceneState["title"] = scene["title"]
-    sceneState["text"] = scene["text"]
-    sceneState["choices"] = [
-        choice["text"]
-        for choice in scene["choices"].values()
-    ]
-    return scene
 
 def clear():
     os.system("cls")
@@ -158,11 +140,85 @@ def mainScreen():
             elif key == b'\x1b':
                 exit()
 
+def getDayData():
+    if state["day"] == 1:
+        return story.DAY_1
+    elif state["day"] == 2.1:
+        return story.DAY2_1
+    elif state["day"] == 2.2:
+        return story.DAY2_2
+    elif state["day"] == 2.3:
+        return story.DAY2_3
+    elif state["day"] == 3.1:
+        return story.DAY3_1
+    elif state["day"] == 3.2:
+        return story.DAY3_2
+    elif state["day"] == 3.3:
+        return story.DAY3_3
+    elif state["day"] == 4.1:
+        return story.DAY4_1
+    elif state["day"] == 4.2:
+        return story.DAY4_2
+    elif state["day"] == 4.3:
+        return story.DAY4_3
+
+def getCurrentScene():
+    day_data = getDayData()
+    if not day_data:
+        return None
+   
+    scenes = day_data.get("scenes", [])
+    for scene in scenes:
+        if scene.get("id") == state["scene_id"]:
+            return scene
+       
+    return None
+
+
+def dayTransition():
+    current_day = state["day"]
+    flags = state["flags"]
+   
+    if current_day == 1:
+        state["scene_id"] = 1
+       
+        authentic_count = sum(1 for f in ["values_authenticity","resists_pressure", "reconnects_with_self"] if f in flags)
+        conflicted_count = sum(1 for f in ["conflicted_path", "seeks_validation", "leans_to_compliance"] if f in flags)
+        detached_count = sum(1 for f in ["suppresses_identity", "emotional_avoidance"] if f in flags)
+       
+        if authentic_count >= 2:
+            state["day"] = 2.1
+        elif conflicted_count >= 2:
+            state["day"] = 2.2
+        elif detached_count >= 2:
+            state["day"] = 2.3
+        else:
+            state["day"] = 2.2
+
+
+        return True
+   
+    elif int(current_day) == 2:
+        state["scene_id"] = 1
+        state["day"] = current_day + 1.0
+        return True
+   
+    elif int(current_day) == 3:
+        state["scene_id"] = 1
+        state["day"] = current_day + 1.0
+        return True
+   
+    return False
+
 def storyScreen():
     console = Console()
     layout = Layout()
     
     selected = 0
+    
+    # ensure starting scene
+    if "scene_id" not in state:
+        state["scene_id"] = 1
     
     layout.split_column(
         Layout(name="Top", size=3),
@@ -181,24 +237,9 @@ def storyScreen():
         Layout(name="Choices", ratio=3),
         Layout(name="Controls", ratio=1))
     
-    # def printScene(text, delay=0.02):
-    #     displayed = ""  # what has been printed so far
-
-    #     with Live(console=console, refresh_per_second=20, screen=False) as live:
-    #         for char in text:
-    #             displayed += char
-    #             live.update(Panel(displayed, title="Main Screen", box=None))
-    #             time.sleep(delay)
-
-    # # Example usage
-    # story_text = """Nolan walks past cafés.
-    # Past offices.
-    # Past construction fences wrapped in advertisements for futures he isn't part of."""
-    # printScene(story_text)
-    
     def cdPanel():
         progress = Progress(
-        TextColumn("[bold #F0B01D]{task.total}[/bold #F0B01D]", style="yellow"),
+        TextColumn("[bold #F0B01D]{task.completed}/{task.total}[/bold #F0B01D]", style="yellow"),
         BarColumn(
             bar_width=50,
             style="bright_black",
@@ -207,7 +248,7 @@ def storyScreen():
         expand=True)
     
         task = progress.add_task("", total=MAX_CD)
-        progress.update(task, completed=50)
+        progress.update(task, completed=state.get("creative_drive", MAX_CD))
         
         delta = state.get("last_cd_change", 0)
         
@@ -216,7 +257,7 @@ def storyScreen():
         elif delta > 0:
             delta_text = Text(f"+{delta}", style="bold green")
         elif delta < 0:
-            delta_text = Text(f"-{delta}", style="bold red")
+            delta_text = Text(f"{delta}", style="bold red")
         else: 
             delta_text = Text(f"{delta}", style="bold white")
             
@@ -245,9 +286,24 @@ def storyScreen():
             border_style="#AE5182"
         )
     
+    def buildScreen(scene):
+        if not scene:
+            return Panel("No scene.", box=box.MINIMAL)
+        title = f"[bold]{scene.get('title','')}[/bold]\n\n"
+        body = scene.get("text","")
+        return Panel(Align.left(Text(title + body)), box=box.MINIMAL, padding=1)
+    
     def buildChoices():
+        nonlocal selected
+        scene = getCurrentScene()
+        choices = scene.get("choices", {}) if scene else {}
+        choices_list = list(choices.keys())
+        if not choices_list:
+            # no choices: show continue prompt
+            return Panel(Align.center(Text("Press Enter to continue")), title="Choices", border_style="#AE5182", padding=1)
         choicesContent = ""
-        for i, text in enumerate(state["choices"]):
+        for i, key in enumerate(choices_list):
+            text = choices[key].get("text", key)
             if i == selected:
                 choicesContent += f"[bold #51AE7D]> {text} <[/bold #51AE7D]\n"
             else:
@@ -255,62 +311,140 @@ def storyScreen():
         return Panel(choicesContent, 
                      title="Choices", 
                      border_style="#AE5182",
-                     padding=1)  
+                     padding=1)
     
+    # initial UI populate
     layout["Bar"].update(cdPanel())
-    
-    day_text = Text(
-        f"DAY {state['day']}",
-        justify="center",
-        style="bold #AE5182"
-    )
-
     layout["Day"].update(
         Panel(
-            Align.center(day_text, vertical="middle", style="#AE5182"),
+            Align.center(Text(f"DAY {state.get('day')}", style="bold #AE5182"), vertical="middle"),
             box=box.MINIMAL)
     )
-    
     layout["List"].update(historyPanel())
-    
-    # layout["Screen"].update(printScene())
-    layout["Choices"].update(buildChoices())
     layout["Controls"].update(keys())
+    layout["Screen"].update(buildScreen(getCurrentScene()))
+    layout["Choices"].update(buildChoices())
     
     clear()
     with Live(layout, console=console, refresh_per_second=20, screen=True):
         while True:
             key = msvcrt.getch()
-
+            
+            scene = getCurrentScene()
+            choices = list(scene.get("choices", {}).keys()) if scene else []
+            choices_len = max(1, len(choices))
+            
             # Arrow keys (special codes)
             if key in (b'\xe0', b'\x00'):
                 key = msvcrt.getch()
                 if key == b'P':  # DOWN
-                    selected = (selected + 1) % len(state["choices"])
+                    selected = (selected + 1) % choices_len
                 elif key == b'H':  # UP
-                    selected = (selected - 1) % len(state["choices"])
+                    selected = (selected - 1) % choices_len
 
                 layout["Choices"].update(buildChoices())
-
+    
             # Enter key
             elif key == b'\r':
-                if selected == len(state["choices"]) - 1: 
-                    pass # B option
+                scene = getCurrentScene()
+                if not scene:
+                    # nothing to show, try transitioning
+                    if dayTransition():
+                        # reset and load next day scene
+                        selected = 0
+                        layout["Bar"].update(cdPanel())
+                        layout["Day"].update(
+                            Panel(
+                                Align.center(Text(f"DAY {state.get('day')}", style="bold #AE5182"), vertical="middle"),
+                                box=box.MINIMAL)
+                        )
+                        layout["Screen"].update(buildScreen(getCurrentScene()))
+                        layout["Choices"].update(buildChoices())
+                        layout["List"].update(historyPanel())
+                        continue
+                    else:
+                        endScreen()
+                        return
+    
+                # if scene has choices
+                if scene.get("choices"):
+                    choice_key = choices[selected]
+                    bridge = applyChoice(state, scene, choice_key)
+    
+                    # show bridge text briefly
+                    layout["Screen"].update(Panel(Align.left(Text(f"[bold]{scene.get('title','')}[/bold]\n\n{bridge}")), box=box.MINIMAL, padding=1))
+                    layout["Bar"].update(cdPanel())
+                    layout["List"].update(historyPanel())
+                    layout["Choices"].update(Panel(" ", title="Choices", border_style="#AE5182"))
+                    time.sleep(0.8)
+    
+                    # advance to next scene
+                    state["scene_id"] = scene["id"] + 1
+                    next_scene = getCurrentScene()
+                    if not next_scene:
+                        # end of day -> try transition
+                        if dayTransition():
+                            selected = 0
+                            layout["Bar"].update(cdPanel())
+                            layout["Day"].update(
+                                Panel(
+                                    Align.center(Text(f"DAY {state.get('day')}", style="bold #AE5182"), vertical="middle"),
+                                    box=box.MINIMAL)
+                            )
+                            layout["Screen"].update(buildScreen(getCurrentScene()))
+                            layout["Choices"].update(buildChoices())
+                            layout["List"].update(historyPanel())
+                            continue
+                        else:
+                            endScreen()
+                            return
+                    else:
+                        selected = 0
+                        layout["Screen"].update(buildScreen(next_scene))
+                        layout["Choices"].update(buildChoices())
+                        layout["Bar"].update(cdPanel())
+                        layout["List"].update(historyPanel())
+    
                 else:
-                    pass # A option
-
+                    # scene has no choices: treat Enter as continue
+                    state["scene_id"] = scene["id"] + 1
+                    next_scene = getCurrentScene()
+                    if not next_scene:
+                        if dayTransition():
+                            selected = 0
+                            layout["Bar"].update(cdPanel())
+                            layout["Day"].update(
+                                Panel(
+                                    Align.center(Text(f"DAY {state.get('day')}", style="bold #AE5182"), vertical="middle"),
+                                    box=box.MINIMAL)
+                            )
+                            layout["Screen"].update(buildScreen(getCurrentScene()))
+                            layout["Choices"].update(buildChoices())
+                            layout["List"].update(historyPanel())
+                            continue
+                        else:
+                            endScreen()
+                            return
+                    else:
+                        selected = 0
+                        layout["Screen"].update(buildScreen(next_scene))
+                        layout["Choices"].update(buildChoices())
+                        layout["Bar"].update(cdPanel())
+                        layout["List"].update(historyPanel())
+    
             # Esc key
             elif key == b'\x1b':
                 exit()
+        
     
 def applyChoice(state, scene, choice_key):
     choice = scene["choices"][choice_key]
 
     cd_before = state["creative_drive"]
-
+    
     state["creative_drive"] += choice["cd_change"]
     state["creative_drive"] = max(MIN_CD, min(MAX_CD, state["creative_drive"]))
-    
+   
     cd_after = state["creative_drive"]
 
     state["flags"].add(choice["flag"])
@@ -322,10 +456,11 @@ def applyChoice(state, scene, choice_key):
             "cd_change": choice["cd_change"]
         }
     )
-    
+   
     state["last_cd_change"] = cd_after - cd_before
 
     return choice["bridge"]
+
 
 def endScreen():
     console = Console()
@@ -356,3 +491,33 @@ def endScreen():
     print(layout)
     key = msvcrt.getch()
     mainScreen()
+    
+def gameOverScreen():
+    console = Console()
+    layout = Layout()
+    
+    clear()
+    
+
+    Layout(name="Top", size=11),
+    
+    header = Panel(
+        Align.center(
+            Group(
+                Align(Text(gameOver, style="bold #AE5182")),
+            )),
+        border_style="#5aa580",
+        box=box.MINIMAL) 
+    
+    layout["Top"].update(header)
+    
+    endPrompt = header = Panel(
+        Align.center(Text("Press any key to go back to menu.")),
+        box=box.MINIMAL)
+
+    
+    print(layout)
+    key = msvcrt.getch()
+    mainScreen()
+    
+    
