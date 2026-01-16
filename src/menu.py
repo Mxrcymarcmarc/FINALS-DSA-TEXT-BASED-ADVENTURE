@@ -151,33 +151,25 @@ def mainScreen():
 def getDayData():
     """
     Robust day lookup: builds attribute name from state['day'].
-    Examples:
-      1    -> DAY_1
-      2.1  -> DAY2_1
-      3.3  -> DAY3_3
+    Tries both naming patterns used in story.py: DAY_2_1 and DAY2_1.
     Returns None if attribute missing or not a mapping with 'scenes'.
     """
     d = state.get("day")
     if d is None:
         return None
 
-    # build attr name
-    if isinstance(d, int):
-        attr = f"DAY_{d}"
-    else:
-        # convert floats or numeric-like strings (e.g. 2.1 -> '2_1')
-        s = str(d).replace('.', '_')
-        # if original integer represented as '1.0' -> ensure matching DAY_1 vs DAY1_0 as needed
-        if s.endswith('_0') and '.' not in str(d):
-            attr = f"DAY_{s[:-2]}"
-        else:
-            attr = f"DAY{s}"
+    # normalize numeric to "2_1" form
+    s = str(d).replace('.', '_')
+    # remove trailing _0 for exact integers represented as floats like '2_0'
+    if s.endswith('_0'):
+        s = s[:-2]
 
-    day_data = getattr(story, attr, None)
+    # try both naming conventions
+    for attr in (f"DAY_{s}", f"DAY{s}"):
+        day_data = getattr(story, attr, None)
+        if isinstance(day_data, dict):
+            return day_data
 
-    # ensure we return a dict-like day object
-    if isinstance(day_data, dict):
-        return day_data
     return None
 
 def getCurrentScene():
@@ -343,7 +335,6 @@ def storyScreen():
                      border_style="#AE5182",
                      padding=1)
     
-    # initial UI populate
     layout["Bar"].update(cdPanel())
     layout["Day"].update(
         Panel(
@@ -393,8 +384,8 @@ def storyScreen():
                         layout["List"].update(historyPanel())
                         continue
                     else:
-                        endScreen()
-                        return
+                        next_action = 'end'
+                        break
     
                 # if scene has choices
                 if scene.get("choices"):
@@ -408,9 +399,9 @@ def storyScreen():
                     layout["Choices"].update(Panel(" ", title="Choices", border_style="#AE5182"))
                     time.sleep(0.8)
                     
-                    #check for game over
+                    # check for game over (creative drive depleted)
                     if state.get("creative_drive", 0) <= 0:
-                        gameOverScreen()
+                        next_action = 'gameover'
                         break
     
                     # advance to next scene
@@ -431,8 +422,8 @@ def storyScreen():
                             layout["List"].update(historyPanel())
                             continue
                         else:
-                            endScreen()
-                            return
+                            next_action = 'end'
+                            break
                     else:
                         selected = 0
                         layout["Screen"].update(buildScreen(next_scene))
@@ -458,8 +449,8 @@ def storyScreen():
                             layout["List"].update(historyPanel())
                             continue
                         else:
-                            endScreen()
-                            return
+                            next_action = 'end'
+                            break
                     else:
                         selected = 0
                         layout["Screen"].update(buildScreen(next_scene))
@@ -470,7 +461,13 @@ def storyScreen():
             # Esc key
             elif key == b'\x1b':
                 exit()
-        
+    
+    # Live closed here -> safe to show end/gameover screens
+    clear()
+    if next_action == 'gameover':
+        gameOverScreen()
+    elif next_action == 'end':
+        endScreen()
     
 def applyChoice(state, scene, choice_key):
     choice = scene["choices"][choice_key]
@@ -500,7 +497,6 @@ def applyChoice(state, scene, choice_key):
 
 
 def endScreen():
-    resetGame()
     console = Console()
     layout = Layout()
     
@@ -528,10 +524,11 @@ def endScreen():
     
     print(layout)
     key = msvcrt.getch()
+    resetGame()
     mainScreen()
     
 def gameOverScreen():
-    resetGame()
+
     console = Console()
     layout = Layout()
     
@@ -559,6 +556,7 @@ def gameOverScreen():
     
     print(layout)
     key = msvcrt.getch()
+    resetGame()
     mainScreen()
     
     
