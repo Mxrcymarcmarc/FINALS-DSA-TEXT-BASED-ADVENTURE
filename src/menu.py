@@ -16,7 +16,7 @@ import time
 def clear():
     os.system("cls")
 
-MAX_ENERGY = 10
+MAX_ENERGY = 100
 state = {
     "day": 1,
     "energy": MAX_ENERGY,

@@ -12,7 +12,6 @@ def main():
         choice = mainScreen()
 
         if choice is None or choice == -1 or choice == 7:
-            # exitProg()
             break
 
         else:
