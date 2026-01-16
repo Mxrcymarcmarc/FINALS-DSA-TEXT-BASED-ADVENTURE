@@ -2,12 +2,13 @@ from rich.layout import Layout
 from rich.panel import Panel
 from rich.text import Text
 from rich import box
-from rich.console import Console
+from rich.console import Console, Group
 from rich.align import Align
 from rich import print
 from rich.columns import Columns
 from rich.live import Live
 from rich.progress import Progress, BarColumn, TextColumn
+import story
 import msvcrt
 import os
 import sys
@@ -21,7 +22,7 @@ state = {
     "creative_drive": MAX_CD,
     "flags": set(),
     "history": [],
-    "choices": ["a", "b"],
+    "choices": ["A. bjhcbajbajbc", "B. vxhxvhxajb"],
     "last_cd_change": None
 }
 
@@ -32,7 +33,32 @@ sceneState = {
     "choices": ""
 }
 
-def stateUpdater(sceneState, scene):
+theArchi = r"""
+    ████████╗ ██╗   ██╗ ██████╗    ██████╗  ██████╗    ██████╗ ██╗   ██╗ ████████╗ ████████╗ ██████╗  ██████╗ ████████╗
+    ╚══██╔══╝ ██║   ██║ ██╔═══╝   ██╔═══██╗ ██╔══██╗  ██╔════╝ ██║   ██║ ╚══██╔══╝ ╚══██╔══╝ ██╔═══╝ ██╔════╝ ╚══██╔══╝
+       ██║    ████████║ █████║    ████████║ ██████╔╝  ██║      ████████║    ██║       ██║    █████║  ██║         ██║ 
+       ██║    ██╔═══██║ ██╔══╝    ██║   ██║ ██╔══██║  ██║      ██╔═══██║    ██║       ██║    ██╔══╝  ██║         ██║
+       ██║    ██║   ██║ ██████║   ██║   ██║ ██║   ██╗ ╚██████╗ ██║   ██║ ████████╗    ██║    ██████║ ╚██████╗    ██║
+       ╚═╝    ╚═╝   ╚═╝ ╚═════╝   ╚═╝   ╚═╝ ╚═╝   ╚═╝  ╚═════╝ ╚═╝   ╚═╝ ╚═══════╝    ╚═╝    ╚═════╝  ╚═════╝    ╚═╝
+"""
+gameOver = r"""
+     ██████╗   ██████╗  ███╗   ███╗ ███████╗    ██████╗  ███╗   ███╗ ███████╗ ██████╗  
+    ██╔════╝  ██╔═══██╗ ████╗ ████║ ██╔════╝   ██╔═══██╗  ██║   ██╔╝ ██╔════╝ ██╔══██╗ 
+    ██║       ████████║ ██╔████╔██║ █████╗     ██║   ██║   ██╗ ██╔╝  █████╗   ██████╔╝ 
+    ██║   ██╗ ██║   ██║ ██║╚██╔╝██║ ██╔══╝     ██║   ██║    ████╔╝   ██╔══╝   ██╔══██║ 
+    ╚███████║ ██║   ██║ ██║ ╚═╝ ██║ ███████╗   ╚██████╔╝    ╚██╔╝    ███████╗ ██║   ██╗
+     ╚══════╝ ╚═╝   ╚═╝ ╚═╝     ╚═╝ ╚══════╝    ╚═════╝      ╚═╝     ╚══════╝ ╚═╝   ╚═╝
+"""
+theEnd = r"""
+    ████████╗ ██╗   ██╗ ██████╗   ██████╗ ███╗   ██╗ ███████╗ 
+    ╚══██╔══╝ ██║   ██║ ██╔═══╝   ██╔═══╝ ████╗  ██║ ██╔═══██╗
+       ██║    ████████║ █████║    █████║  ██╔██╗ ██║ ██║   ██║
+       ██║    ██╔═══██║ ██╔══╝    ██╔══╝  ██║╚██╗██║ ██║   ██║
+       ██║    ██║   ██║ ██████║   ██████║ ██║ ╚████║ ███████╔╝
+       ╚═╝    ╚═╝   ╚═╝ ╚═════╝   ╚═════╝ ╚═╝  ╚═══╝ ╚══════╝ 
+"""
+
+def stateUpdater(scene):
     sceneState["choice_keys"] = list(scene["choices"].keys())
     sceneState["id"] = scene["id"]
     sceneState["title"] = scene["title"]
@@ -46,47 +72,65 @@ def stateUpdater(sceneState, scene):
 def clear():
     os.system("cls")
 
-
 def keys():
     keyPress = r"""
-       ⇅     Move Selection
-     Enter   Select
-      Esc    Exit
+         Navigation Keys
+         
+           ⇅     Move Selection
+         Enter   Select
+          Esc    Exit
     """
-    return Panel(keyPress, title="Navigation Keys", border_style="blue")
+    return Panel(keyPress, box=box.MINIMAL)
 
 def mainScreen():
     console = Console()
     layout = Layout()
+    
+    clear()
 
     menuTexts = ["New Game", "Exit Game"]
     selected = 0
 
     # Setup layout
     layout.split_column(
-        Layout(name="Top", size=15),
+        Layout(name="Top", size=11),
         Layout(name="Middle", size=8)
     )
     layout["Middle"].split_row(
         Layout(name="Navigation", ratio=1),
-        Layout(name="Menu", ratio=2)
+        Layout(name="Menu", ratio=2),
+        Layout(name="Extra", ratio=1)
+        
     )
 
     def build_menu():
         menuContent = ""
         for i, text in enumerate(menuTexts):
             if i == selected:
-                menuContent += f"[bold #E1B34B]> {text} <[/bold #E1B34B]\n"
+                menuContent += f"[bold #51AE7D]> {text} <[/bold #51AE7D]\n"
             else:
-                menuContent += f"  {text}\n"
-        return Panel(menuContent, 
-                     title="Pokemon Menu", 
-                     border_style="blue",
-                     padding=1)
+                menuContent += f"  {text} \n"
+
+        return Panel(
+            Align.center(Text.from_markup(menuContent), vertical="middle"),
+            title="Menu",
+            padding=(1, 2),
+            box=box.MINIMAL
+        )
+    extra = Panel(" ", box=box.MINIMAL) 
+    header = Panel(
+        Align.center(
+            Group(
+                Align(Text(theArchi, style="bold #AE5182")),
+                Align.center(Text("Made By GROUP 4", justify="center", style="bold #AE5182")))),
+        border_style="#5aa580",
+        box=box.MINIMAL)  
 
     # Initial update
+    layout["Top"].update(header)
     layout["Navigation"].update(keys())
     layout["Menu"].update(build_menu())
+    layout["Extra"].update(extra)
 
     clear()
     with Live(layout, console=console, refresh_per_second=20, screen=True):
@@ -163,7 +207,7 @@ def storyScreen():
         expand=True)
     
         task = progress.add_task("", total=MAX_CD)
-        progress.update(task, completed=state["creative_drive"])
+        progress.update(task, completed=50)
         
         delta = state.get("last_cd_change", 0)
         
@@ -198,19 +242,19 @@ def storyScreen():
         return Panel(
             Align.left(Text("\n").join(lines)),
             title="History",
-            border_style="white"
+            border_style="#AE5182"
         )
     
     def buildChoices():
         choicesContent = ""
         for i, text in enumerate(state["choices"]):
             if i == selected:
-                choicesContent += f"[bold #E1B34B]> {text} <[/bold #E1B34B]\n"
+                choicesContent += f"[bold #51AE7D]> {text} <[/bold #51AE7D]\n"
             else:
                 choicesContent += f"  {text}\n"
         return Panel(choicesContent, 
                      title="Choices", 
-                     border_style="blue",
+                     border_style="#AE5182",
                      padding=1)  
     
     layout["Bar"].update(cdPanel())
@@ -218,12 +262,12 @@ def storyScreen():
     day_text = Text(
         f"DAY {state['day']}",
         justify="center",
-        style="bold #F0B01D"
+        style="bold #AE5182"
     )
 
     layout["Day"].update(
         Panel(
-            Align.center(day_text, vertical="middle"),
+            Align.center(day_text, vertical="middle", style="#AE5182"),
             box=box.MINIMAL)
     )
     
@@ -283,3 +327,32 @@ def applyChoice(state, scene, choice_key):
 
     return choice["bridge"]
 
+def endScreen():
+    console = Console()
+    layout = Layout()
+    
+    clear()
+    
+    layout.split_column(
+        Layout(name="Top", size=11),
+        Layout(name="Middle", size=8))
+    
+    header = Panel(
+        Align.center(
+            Group(
+                Align(Text(theEnd, style="bold #AE5182")),
+                Align.center(Text("Ending ??: wowow", justify="center", style="bold #51AE7D")))),
+        border_style="#5aa580",
+        box=box.MINIMAL) 
+    
+    layout["Top"].update(header)
+    
+    endPrompt = header = Panel(
+        Align.center(Text("Press any key to go back to menu.")),
+        box=box.MINIMAL)
+    
+    layout["Middle"].update(endPrompt)
+    
+    print(layout)
+    key = msvcrt.getch()
+    mainScreen()

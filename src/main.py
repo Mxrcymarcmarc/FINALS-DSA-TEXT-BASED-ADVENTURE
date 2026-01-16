@@ -1,4 +1,4 @@
-from menu import storyScreen, mainScreen
+from menu import mainScreen, endScreen
 
 MAX_ENERGY = 100
 state = {
@@ -16,7 +16,8 @@ def main():
             break
 
         else:
-            storyScreen()
+            # storyScreen()
+            endScreen()
     
 if __name__ == "__main__":
     main()
