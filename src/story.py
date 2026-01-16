@@ -67,7 +67,7 @@ DAY_1 = {
 
         {
             "id": 3,
-            "title": "B. THE CLIENT PRESENTATION",
+            "title": "THE CLIENT PRESENTATION",
             "text": (
                 "The firm studies Nolan's proposal.\n"
                 "\"We're looking for something more marketable.\""
