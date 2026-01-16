@@ -506,11 +506,15 @@ def endScreen():
         Layout(name="Top", size=11),
         Layout(name="Middle", size=8))
     
+    # determine day title for ending display
+    day_data = getDayData()
+    day_title = day_data.get("title", "THE END") if day_data else "THE END"
+    
     header = Panel(
         Align.center(
             Group(
                 Align(Text(theEnd, style="bold #AE5182")),
-                Align.center(Text("Ending ??: wowow", justify="center", style="bold #51AE7D")))),
+                Align.center(Text(day_title, justify="center", style="bold #51AE7D")))),
         border_style="#5aa580",
         box=box.MINIMAL) 
     
