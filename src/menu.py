@@ -498,14 +498,15 @@ def gameOverScreen():
     
     clear()
     
-
-    Layout(name="Top", size=11),
+    layout.split_column(
+        Layout(name="Top", size=11),
+        Layout(name="Middle", size=8))
     
     header = Panel(
         Align.center(
             Group(
                 Align(Text(gameOver, style="bold #AE5182")),
-            )),
+                Align.center(Text("Your energy has reached 0.", justify="center", style="bold #51AE7D")))),
         border_style="#5aa580",
         box=box.MINIMAL) 
     
@@ -514,7 +515,8 @@ def gameOverScreen():
     endPrompt = header = Panel(
         Align.center(Text("Press any key to go back to menu.")),
         box=box.MINIMAL)
-
+    
+    layout["Middle"].update(endPrompt)
     
     print(layout)
     key = msvcrt.getch()

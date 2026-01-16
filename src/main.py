@@ -1,4 +1,4 @@
-from menu import mainScreen, endScreen, storyScreen
+from menu import mainScreen, endScreen, storyScreen, gameOverScreen
 
 def main():
     while True:
@@ -9,7 +9,7 @@ def main():
 
         else:
             storyScreen()
-
+            # gameOverScreen()
     
 if __name__ == "__main__":
     main()
