@@ -274,6 +274,7 @@ def applyChoice(state, scene, choice_key):
 
 def stateUpdater(sceneState, scene):
     sceneState["choice_keys"] = list(scene["choices"].keys())
+    sceneState["id"] = scene["id"]
     sceneState["title"] = scene["title"]
     sceneState["text"] = scene["text"]
     sceneState["choices"] = [
