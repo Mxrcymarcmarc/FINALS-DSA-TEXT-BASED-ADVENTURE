@@ -7,7 +7,7 @@ from rich.align import Align
 from rich import print
 from rich.columns import Columns
 from rich.live import Live
-from rich.progress import Progress, BarColumn, TextColumn, TimeRemainingColumn
+from rich.progress import Progress, BarColumn, TextColumn
 import msvcrt
 import os
 import sys
@@ -23,6 +23,13 @@ state = {
     "history": [],
     "choices": ["a", "b"],
     "last_cd_change": None
+}
+
+sceneState = {
+    "id": 0,
+    "title": "",
+    "text": "",
+    "choices": ""
 }
 
 def clear():
@@ -264,3 +271,13 @@ def applyChoice(state, scene, choice_key):
     state["last_cd_change"] = cd_after - cd_before
 
     return choice["bridge"]
+
+def stateUpdater(sceneState, scene):
+    sceneState["choice_keys"] = list(scene["choices"].keys())
+    sceneState["title"] = scene["title"]
+    sceneState["text"] = scene["text"]
+    sceneState["choices"] = [
+        choice["text"]
+        for choice in scene["choices"].values()
+    ]
+    return scene
