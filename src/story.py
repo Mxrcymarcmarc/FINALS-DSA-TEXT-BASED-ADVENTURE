@@ -1,5 +1,3 @@
-MAX_CD = 100
-
 state = {
     "day": 1,
     "creative_drive": 100,
