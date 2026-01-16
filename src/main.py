@@ -1,7 +1,6 @@
-from menu import titleMenu
+from menu import storyScreen, mainScreen
 
-MAX_ENERGY = 10
-
+MAX_ENERGY = 100
 state = {
     "day": 1,
     "energy": MAX_ENERGY,
@@ -9,9 +8,15 @@ state = {
 }
 
 def main():
-    titleMenu()
-    
-    
+    while True:
+        choice = mainScreen()
+
+        if choice is None or choice == -1 or choice == 7:
+            # exitProg()
+            break
+
+        else:
+            storyScreen()
     
 if __name__ == "__main__":
     main()
