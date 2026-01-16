@@ -82,7 +82,7 @@ def mainScreen():
 
     # Setup layout
     layout.split_column(
-        Layout(name="Top", size=11),
+        Layout(name="Top", size=13),
         Layout(name="Middle", size=8)
     )
     layout["Middle"].split_row(
@@ -98,7 +98,7 @@ def mainScreen():
             if i == selected:
                 menuContent += f"[bold #51AE7D]> {text} <[/bold #51AE7D]\n"
             else:
-                menuContent += f"  {text} \n"
+                menuContent += f"  {text}  \n"
 
         return Panel(
             Align.center(Text.from_markup(menuContent), vertical="middle"),
@@ -111,6 +111,7 @@ def mainScreen():
         Align.center(
             Group(
                 Align(Text(theArchi, style="bold #AE5182")),
+                Align.center(Text("A Text-based Adventure Game", justify="center", style="bold #AE5182")),
                 Align.center(Text("Made By GROUP 4", justify="center", style="bold #AE5182")))),
         border_style="#5aa580",
         box=box.MINIMAL)  
